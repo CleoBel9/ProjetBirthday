@@ -2,9 +2,10 @@
 
 namespace App\Controller;
 
-use App\DataFixtures\Birthday;
+use App\Entity\Birthday;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\MakerBundle\Validator;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -12,13 +13,11 @@ use Symfony\Component\Routing\Attribute\Route;
 class BirthdayController extends AbstractController
 {
     #[Route('/birthday', name: 'app_birthday')]
-    public function index(): Response
+    public function index(EntityManagerInterface $em): Response
     {
-        $birthday = $this->getDoctrine()->getRepository(Birthday::class)->findAll();
+        $birthdays = $em->getRepository(Birthday::class)->findAll();
         return $this->json([
-            "data" => $birthday,
+            "data" => $birthdays,
         ]);
     }
-
-    
 }
